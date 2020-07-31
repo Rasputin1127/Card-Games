@@ -22,9 +22,13 @@ results:
 def cards_value(hand):
 	card_value = {'A':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '1':10, 'J':10, 'Q':10, 'K':10}
 	card_total = 0
-	for arg in hand:
-		arg = str(arg)
-		card_total += card_value[arg[2]]
+	if type(hand) == list:
+		for arg in hand:
+			arg = str(arg)
+			card_total += card_value[arg[2]]
+	else:
+		print(hand)
+		card_total = card_value[str(hand)[2]]
 	return card_total
 
 def hit(hand, deck):
@@ -35,6 +39,7 @@ def hit(hand, deck):
 def user_turn(hand, deck, total):
 	stay = False
 	while stay == False:
+		print(f"You are looking at {hand}.")
 		print(f"Your current total is {total}.")
 		if total > 21:
 			print("Sorry! You busted!")
@@ -43,7 +48,6 @@ def user_turn(hand, deck, total):
 			answer = input("Would you like to hit or stay? ")
 			if answer.lower()[0] == "h":
 				hand = hit(hand, deck)
-				print(hand)
 				total = cards_value(hand)
 			elif answer.lower()[0] == "s":
 				print(f"You stay with {total}.")
@@ -73,10 +77,10 @@ def result(total_1, total_2, deck):
 		if total_1 >= 21 and total_2 >= 21:
 			print("Both player and house bust! No winners this time.")
 			break
-		elif total_1 >= 21 and total_2 <= 21:
+		elif total_1 > 21 and total_2 <= 21:
 			print("Player busts! House wins!")
 			break
-		elif total_1 <= 21 and total_2 >= 21:
+		elif total_1 <= 21 and total_2 > 21:
 			print("House busts! Player wins!")
 			break
 		elif total_1 > total_2:
@@ -88,10 +92,10 @@ def result(total_1, total_2, deck):
 		else:
 			print("Sudden Death! Each player will draw a card and high card wins.")
 			sleep(1)
-			total_1 = total(deck.deal_card())
+			total_1 = cards_value(deck.deal_card())
 			print(f"Player's card is equal to {total_1}.")
 			sleep(1)
-			total_2 = total(deck.deal_card())
+			total_2 = cards_value(deck.deal_card())
 			print(f"Dealer's card is equal to {total_2}.")
 
 replay = 'y'
@@ -107,10 +111,3 @@ while replay == 'y':
 	dealer_total, dealer_hand = dealer_turn(dealer_hand, d, dealer_total)
 	result(player_total, dealer_total, d)
 	replay = input("Would you like to play again? y/n ").lower()[0]
-
-
-
-# player_hand = d.deal_hand(2)
-# total(player_hand)
-# hit(player_hand)
-# total(player_hand)
