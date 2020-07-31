@@ -47,9 +47,4 @@ class Deck:
 		shuffle(self.cards)
 		return self
 
-d = Deck()
-print(d)
-print(d.count())
-d.shuffle()
-print(d.deal_card())
-print(d.deal_hand(5))
+
